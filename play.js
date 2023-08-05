@@ -1,33 +1,67 @@
 const http = require('http');
-
+const fs = require('fs');
 
 const server = http.createServer((req, res) => {
     const url = req.url;
-   res.setHeader('Content-Type','text/html');
-   res.write('<html>');
-   res.write('<head><title> my first page</title></head>');
-   res.write("<header> <a href='/home' >Home</a>  <a href='/about' >about </a> <a href='/node' > node</a></header>")
-   
-   res.write('<body>');
-  
+    res.setHeader('Content-Type', 'text/html');
 
-   if (url === '/home') {
-    res.write('<p>Welcome to home</p>');
-  } else if (url === '/about') {
-    res.write('<p>Welcome to About Us page</p>');
-  } else if (url === '/node') {
-    res.write('<p>Welcome to my Node.js project</p>');
-  } else {
-    res.statusCode = 404;
-    res.write('<p>Page not found</p>');
-  }
+    if (url === '/') {
+        // Read messages from the file
+        const messages = readMessagesFromFile();
 
-  
-  res.write('</body>');
-  res.write('</html>');
-   
+        res.write('<html>');
+        res.write('<head><title>My First Page</title></head>');
+        res.write('<body>');
+
+        res.write('<div>');
+        messages.forEach((message) => {
+            res.write(`<p>${message}</p>`);
+        });
+        res.write('</div>');
+
+        res.write("<form action='/message' method='POST'><input type='text' name='message'><button type='submit'>Send</button></form>");
+        res.write('</body>');
+        res.write('</html>');
+        return res.end();
+    }
+
+    if (url === '/message' && req.method === 'POST') {
+        const body = [];
+        req.on('data', (chunk) => {
+            body.push(chunk);
+        });
+
+        req.on('end', () => {
+            const parsedBody = Buffer.concat(body).toString();
+            const message = parsedBody.split('=')[1];
+
+            
+            appendMessageToFile(message);
+
+            res.statusCode = 302;
+            res.setHeader('Location', '/');
+            return res.end();
+        });
+    } else {
+        res.statusCode = 404;
+        res.write('<html><body><p>Page not found</p></body></html>');
+        return res.end();
+    }
 });
 
-server.listen(4000, () =>{
-    console.log('kumar aakarshan')
-})
+const readMessagesFromFile = () => {
+    try {
+        const data = fs.readFileSync('messages.txt', 'utf8');
+        return data.split('\n').filter((message) => message.trim() !== '');
+    } catch (err) {
+        return [];
+    }
+};
+
+const appendMessageToFile = (message) => {
+    fs.appendFileSync('messages.txt', message + '\n');
+};
+
+server.listen(4000, () => {
+    console.log('Server running at port 4000');
+});
