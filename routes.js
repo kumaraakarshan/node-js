@@ -66,4 +66,13 @@ const method = req.method;
 
 
 module.exports=requestHandler;
-    
+
+// modulele.exports={
+//     handler:requestHandler,
+//     sometext:"some test is written";
+
+// };
+// module.exports.handler=requestHandler;
+// module.exports.someText='some text is written';
+// exports.handler= requestHandler;
+// exports.someText='some text is writetn';
