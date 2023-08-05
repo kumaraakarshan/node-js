@@ -8,7 +8,7 @@
     "start": "node play.js",
     "start-server": "node play.js"
   },
-  "author": "kumar aakarshan",
+  "author": "kumar aakarshan singh",
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^3.0.1"
