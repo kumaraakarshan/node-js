@@ -1,0 +1,14 @@
+{
+  "name": "node-js",
+  "version": "1.0.0",
+  "description": "complete node js guide",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node play.js",
+    "start-server":"node play.js"
+
+  },
+  "author": "kumar aakarshan",
+  "license": "ISC"
+}
