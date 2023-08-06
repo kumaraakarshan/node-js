@@ -1,12 +1,18 @@
-const http = require('http');
+
 
 const express=require('express');
 
 
 const app= express();
 
-const server = http.createServer(app);
-
-server.listen(4000, () => {
-    console.log('Server running at port 4000');
+app.use((req, res, next)=>{
+console.log('middle ware!!!');
+next();
 });
+app.use((req, res, next)=>{
+    console.log('another middle ware!!!');
+
+    res.send('<h1> hello from express<h1>');
+    });
+
+app.listen(4000);
